@@ -3,6 +3,21 @@ Learning GO from https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/hel
 # Arrays
 Fixed size, even functions that requires array needs their size.
 
+# Slices
+
+Like array without fix size, it has initial size but can grow with append function. Check slices.go:14
+
+# Functions
+
+## Functions: assigned to objects
+functions can be assigned to objects:
+
+```go
+checkSums := func(t testing.TB, got, want []int) {}
+// Usage:
+checkSums(t, got, want)
+```
+
 # godocs
 - install
 ```sh
@@ -38,3 +53,8 @@ go test -bench=.
 ## More info
 https://golang.org/pkg/testing/#hdr-Benchmarks
 https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/iteration#benchmarking
+
+# Coverage
+```sh
+go test -cover
+```
