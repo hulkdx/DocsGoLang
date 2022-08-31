@@ -1,5 +1,8 @@
 Learning GO from https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/hello-world
 
+# Arrays
+Fixed size, even functions that requires array needs their size.
+
 # godocs
 - install
 ```sh
