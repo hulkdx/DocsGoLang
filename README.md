@@ -57,6 +57,8 @@ godoc -http=:6060
 
 Should show the docs: http://localhost:6060/pkg/
 
+In macos the path directory is `~/go/bin/godoc`
+
 # Example
 ```go
 func ExampleAdd() {
@@ -85,3 +87,13 @@ https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/iteration#benchmarki
 ```sh
 go test -cover
 ```
+
+# errcheck
+```sh
+# install
+go install github.com/kisielk/errcheck@latest
+# run
+errcheck .
+```
+
+More info: https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/pointers-and-errors#unchecked-errors
