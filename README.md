@@ -97,3 +97,9 @@ errcheck .
 ```
 
 More info: https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/pointers-and-errors#unchecked-errors
+
+# Others
+
+- The `var` keyword allows us to define values global to the package.
+
+https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/pointers-and-errors#refactor-3
