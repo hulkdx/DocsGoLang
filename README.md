@@ -44,6 +44,28 @@ func (c Circle) Area() float64 {
 	return math.Pi * c.Radius * c.Radius
 }
 ```
+# Concurrency
+
+`go doSomething()` will run doSomething concurrently (similar to `suspend fun` in kotlin). The example below will run in anonymous function:
+```go
+go func() {
+	results[url] = wc(url)
+}()
+```
+
+## race conditions detector
+```sh
+go test -race
+```
+
+More info:
+https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/concurrency
+
+## Channels
+
+Writing to the map can cause race condition, we can use channels in go:
+
+https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/concurrency#channels
 
 # godocs
 - install
@@ -79,9 +101,16 @@ Running the benchmark with
 ```sh
 go test -bench=.
 ```
+
+You can reset the time, if there are some preparation for the test with this code:
+```go
+b.ResetTimer()
+```
+
 ## More info
 https://golang.org/pkg/testing/#hdr-Benchmarks
 https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/iteration#benchmarking
+https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/concurrency#write-a-test
 
 # Coverage
 ```sh
