@@ -9,6 +9,8 @@ Like array without fix size, it has initial size but can grow with append functi
 
 # Functions
 
+private functions start with lower-case and public functions start with capital.
+
 ## Functions: assigned to objects
 functions can be assigned to objects:
 
@@ -29,8 +31,11 @@ func (r Rectangle) Area() float64 {
 }
 ```
 
-# Interfaces
+## defer
+By prefixing a function call with defer it will now call that function at the end of the containing function. Example: https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/select#refactor
 
+
+# Interfaces
 No need to inherit / implements, it just works.
 
 ```go
@@ -66,6 +71,45 @@ https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/concurrency
 Writing to the map can cause race condition, we can use channels in go:
 
 https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/concurrency#channels
+
+## select
+`myVar := <-ch` means that you wait for values to be sent to a channel, and that is blocking call.
+
+`select` wait on multiple channels, the first one wins and the code underneath the `case` is executed.
+
+```go
+// 1. struct{} is the smallest datatype avaialble. But it can be any other type like bool
+// 2. always use make for channels
+func ping(url string) chan struct{} {
+	ch := make(chan struct{})
+	go func() {
+		http.Get(url)
+		close(ch)
+	}()
+	return ch
+}
+
+func Racer(a, b string) (winner string) {
+	select {
+	case <-ping(a):
+		return a
+	case <-ping(b):
+		return b
+	}
+}
+```
+
+# Http
+```go
+http.Get("http://www.facebook.com")
+
+// in test:
+server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}))
+url := server.URL
+server.Close()
+```
 
 # godocs
 - install
