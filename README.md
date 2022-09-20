@@ -99,6 +99,38 @@ func Racer(a, b string) (winner string) {
 }
 ```
 
+## sync
+
+### wait
+
+```go
+var wg sync.WaitGroup
+wg.Add(wantedCount)
+
+for i := 0; i < wantedCount; i++ {
+	go func() {
+		counter.Inc()
+		wg.Done()
+	}()
+}
+wg.Wait()
+```
+
+### mutex
+
+```go
+type Counter struct {
+	mu    sync.Mutex
+	value int
+}
+
+func (c *Counter) Inc() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.value++
+}
+```
+
 # Http
 ```go
 http.Get("http://www.facebook.com")
@@ -170,6 +202,9 @@ errcheck .
 ```
 
 More info: https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/pointers-and-errors#unchecked-errors
+
+# go vet
+Remember to use go vet in your build scripts as it can alert you to some subtle bugs in your code before they hit your poor users.
 
 # Others
 
