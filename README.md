@@ -16,15 +16,16 @@
 		- [wait](#wait)
 		- [mutex](#mutex)
 - [Http](#http)
-- [godocs](#godocs)
-- [Example](#example)
-- [Benchmarking](#benchmarking)
-	- [More info](#more-info)
-- [Coverage](#coverage)
-- [errcheck](#errcheck)
-- [go vet](#go-vet)
-- [Others](#others)
+- [Var keyword](#var-keyword)
 - [Property based tests](#property-based-tests)
+- [Go tools](#go-tools)
+	- [godocs](#godocs)
+	- [Example](#example)
+	- [Benchmarking](#benchmarking)
+		- [More info](#more-info)
+	- [Coverage](#coverage)
+	- [errcheck](#errcheck)
+	- [GO Vet](#go-vet)
 
 # Arrays
 Fixed size, even functions that requires array needs their size.
@@ -169,70 +170,8 @@ url := server.URL
 server.Close()
 ```
 
-# godocs
-- install
-```sh
-go install golang.org/x/tools/cmd/godoc@latest
-```
-- run
-```sh
-godoc -http=:6060
-```
 
-Should show the docs: http://localhost:6060/pkg/
-
-In macos the path directory is `~/go/bin/godoc`
-
-# Example
-```go
-func ExampleAdd() {
-	sum := Add(1, 5)
-	fmt.Println(sum)
-	// Output: 6
-}
-```
-# Benchmarking
-```go
-func BenchmarkRepeat(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		Repeat("a", 5)
-	}
-}
-```
-Running the benchmark with
-```sh
-go test -bench=.
-```
-
-You can reset the time, if there are some preparation for the test with this code:
-```go
-b.ResetTimer()
-```
-
-## More info
-https://golang.org/pkg/testing/#hdr-Benchmarks
-https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/iteration#benchmarking
-https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/concurrency#write-a-test
-
-# Coverage
-```sh
-go test -cover
-```
-
-# errcheck
-```sh
-# install
-go install github.com/kisielk/errcheck@latest
-# run
-errcheck .
-```
-
-More info: https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/pointers-and-errors#unchecked-errors
-
-# go vet
-Remember to use go vet in your build scripts as it can alert you to some subtle bugs in your code before they hit your poor users.
-
-# Others
+# Var keyword
 
 - The `var` keyword allows us to define values global to the package.
 
@@ -261,3 +200,69 @@ func TestPropertiesOfConversion(t *testing.T) {
 	}
 }
 ```
+
+
+# Go tools
+
+## godocs
+- install
+```sh
+go install golang.org/x/tools/cmd/godoc@latest
+```
+- run
+```sh
+godoc -http=:6060
+```
+
+Should show the docs: http://localhost:6060/pkg/
+
+In macos the path directory is `~/go/bin/godoc`
+
+## Example
+```go
+func ExampleAdd() {
+	sum := Add(1, 5)
+	fmt.Println(sum)
+	// Output: 6
+}
+```
+## Benchmarking
+```go
+func BenchmarkRepeat(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Repeat("a", 5)
+	}
+}
+```
+Running the benchmark with
+```sh
+go test -bench=.
+```
+
+You can reset the time, if there are some preparation for the test with this code:
+```go
+b.ResetTimer()
+```
+
+### More info
+https://golang.org/pkg/testing/#hdr-Benchmarks
+https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/iteration#benchmarking
+https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/concurrency#write-a-test
+
+## Coverage
+```sh
+go test -cover
+```
+
+## errcheck
+```sh
+# install
+go install github.com/kisielk/errcheck@latest
+# run
+errcheck .
+```
+
+More info: https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/pointers-and-errors#unchecked-errors
+
+## GO Vet
+Remember to use go vet in your build scripts as it can alert you to some subtle bugs in your code before they hit your poor users.
