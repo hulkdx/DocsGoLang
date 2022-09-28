@@ -1,4 +1,30 @@
-Learning GO from https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/hello-world
+# Learning GO with tests
+
+- [Learning GO with tests](#learning-go-with-tests)
+- [Arrays](#arrays)
+- [Slices](#slices)
+- [Functions](#functions)
+	- [Functions: assigned to objects](#functions-assigned-to-objects)
+	- [Functions: for struct](#functions-for-struct)
+	- [defer](#defer)
+- [Interfaces](#interfaces)
+- [Concurrency](#concurrency)
+	- [race conditions detector](#race-conditions-detector)
+	- [Channels](#channels)
+	- [select](#select)
+	- [sync](#sync)
+		- [wait](#wait)
+		- [mutex](#mutex)
+- [Http](#http)
+- [godocs](#godocs)
+- [Example](#example)
+- [Benchmarking](#benchmarking)
+	- [More info](#more-info)
+- [Coverage](#coverage)
+- [errcheck](#errcheck)
+- [go vet](#go-vet)
+- [Others](#others)
+- [Property based tests](#property-based-tests)
 
 # Arrays
 Fixed size, even functions that requires array needs their size.
@@ -211,3 +237,27 @@ Remember to use go vet in your build scripts as it can alert you to some subtle 
 - The `var` keyword allows us to define values global to the package.
 
 https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/pointers-and-errors#refactor-3
+
+# Property based tests
+
+Using random number to test the function:
+
+```go
+func TestPropertiesOfConversion(t *testing.T) {
+	assertion := func(arabic uint16) bool {
+		if arabic > 3999 {
+			return true
+		}
+		t.Log("testing", arabic)
+		roman := ConvertToRoman(arabic)
+		fromRoman := ConvertToArabic(roman)
+		return fromRoman == arabic
+	}
+
+	if err := quick.Check(assertion, &quick.Config{
+		MaxCount: 1000,
+	}); err != nil {
+		t.Error("failed checks", err)
+	}
+}
+```
