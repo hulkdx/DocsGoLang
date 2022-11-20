@@ -1,13 +1,18 @@
 # Arrays
-Fixed size, even functions that requires array needs their size.
+
+- Fixed size
+- functions that requires array needs their size.
 
 # Slices
 
-Like array without fix size, it has initial size but can grow with append function. Check slices.go:14
+- array without fix size
+- it has initial size but can grow with `append` function
+- Check slices.go:14
 
 # Functions
 
-private functions start with lower-case and public functions start with capital.
+- `private` function starts with `lower case`
+- `public`  function starts with `upper case`
 
 ## Functions: assigned to objects
 functions can be assigned to objects:
