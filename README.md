@@ -1,32 +1,3 @@
-# Learning GO with tests
-
-- [Learning GO with tests](#learning-go-with-tests)
-- [Arrays](#arrays)
-- [Slices](#slices)
-- [Functions](#functions)
-	- [Functions: assigned to objects](#functions-assigned-to-objects)
-	- [Functions: for struct](#functions-for-struct)
-	- [defer](#defer)
-- [Interfaces](#interfaces)
-- [Concurrency](#concurrency)
-	- [race conditions detector](#race-conditions-detector)
-	- [Channels](#channels)
-	- [select](#select)
-	- [sync](#sync)
-		- [wait](#wait)
-		- [mutex](#mutex)
-- [Http](#http)
-- [Var keyword](#var-keyword)
-- [Property based tests](#property-based-tests)
-- [Go tools](#go-tools)
-	- [godocs](#godocs)
-	- [Example](#example)
-	- [Benchmarking](#benchmarking)
-		- [More info](#more-info)
-	- [Coverage](#coverage)
-	- [errcheck](#errcheck)
-	- [GO Vet](#go-vet)
-
 # Arrays
 Fixed size, even functions that requires array needs their size.
 
