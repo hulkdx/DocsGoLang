@@ -1,18 +1,84 @@
-# Arrays
+Go language documentation
 
-- Fixed size
-- functions that requires array needs their size.
+- [Variables](#variables)
+	- [Immutable](#immutable)
+	- [Mutable](#mutable)
+- [Arrays](#arrays)
+- [Slices](#slices)
+- [Maps](#maps)
+- [Errors](#errors)
+- [Functions](#functions)
+	- [Functions: assigned to objects](#functions-assigned-to-objects)
+	- [Functions: for struct](#functions-for-struct)
+	- [defer](#defer)
+	- [variadic](#variadic)
+- [Interfaces](#interfaces)
+- [Pointer](#pointer)
+- [Concurrency](#concurrency)
+	- [race conditions detector](#race-conditions-detector)
+	- [Channels](#channels)
+	- [select](#select)
+	- [sync](#sync)
+		- [wait](#wait)
+		- [mutex](#mutex)
+- [Reflection](#reflection)
+- [Http](#http)
+	- [context](#context)
+- [Property based tests](#property-based-tests)
+- [String builder](#string-builder)
+- [files](#files)
+- [Go tools](#go-tools)
+	- [godocs](#godocs)
+	- [Example](#example)
+	- [Benchmarking](#benchmarking)
+	- [Coverage](#coverage)
+	- [errcheck](#errcheck)
+	- [vet](#vet)
+# Variables
+
+## Immutable
+```go
+x := ""
+```
+## Mutable
+```go
+var x = "123"
+```
+# Arrays
+Fixed size, even functions that requires array needs their size.
+```go
+myArray := [3]int{1,2,3}
+```
 
 # Slices
 
-- array without fix size
-- it has initial size but can grow with `append` function
-- Check slices.go:14
+Like array without fix size, it has initial size but can grow with append function. Check slices.go:14
+```go
+mySlice := []int{1,2,3}
+// append:
+var sums []int
+sums = append(sums, Sum(numbers))
+// every element except the first one
+mySlice[1:]
+```
+
+# Maps
+```go
+dictionary := map[string]string{"test": "this is just a test"}
+dictionary["test"]
+```
+
+# Errors
+```go
+// type
+(error)
+// create a new error:
+errors.New("test")
+```
 
 # Functions
 
-- `private` function starts with `lower case`
-- `public`  function starts with `upper case`
+private functions start with lower-case and public functions start with capital.
 
 ## Functions: assigned to objects
 functions can be assigned to objects:
@@ -37,7 +103,17 @@ func (r Rectangle) Area() float64 {
 ## defer
 By prefixing a function call with defer it will now call that function at the end of the containing function. Example: https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/select#refactor
 
-
+## variadic
+```go
+func SumAll(numbersToSum ...[]int) []int {
+	lengthOfNumbers := len(numbersToSum)
+	sums := make([]int, lengthOfNumbers)
+	for i, numbers := range numbersToSum {
+		sums[i] = Sum(numbers)
+	}
+	return sums
+}
+```
 # Interfaces
 No need to inherit / implements, it just works.
 
@@ -52,6 +128,30 @@ func (c Circle) Area() float64 {
 	return math.Pi * c.Radius * c.Radius
 }
 ```
+
+`interface{}` means any type
+
+# Pointer
+The following code does not change amount in `Wallet`:
+```go
+type Wallet struct {
+	amount int
+}
+func (r Wallet) Deposit(amount int) {
+	r.amount = amount
+}
+```
+The Deposit needs to be changed to pointer, so it works:
+```go
+func (r *Wallet) Deposit(amount int) ...
+```
+The reason is:
+In Go, when you call a function or a method the arguments are copied.
+When calling `func (w Wallet) Deposit(amount int)` the `w` is a copy of whatever we called the method from.
+You can find out what the address of that bit of memory with `&myVal`
+
+Pointers let us point to some values and then let us change them. So rather than taking a copy of the whole Wallet, we instead take a pointer to that wallet so that we can change the original values within it.
+
 # Concurrency
 
 `go doSomething()` will run doSomething concurrently (similar to `suspend fun` in kotlin). The example below will run in anonymous function:
@@ -72,11 +172,23 @@ https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/concurrency
 ## Channels
 
 Writing to the map can cause race condition, we can use channels in go:
+```go
+type result struct {
+	string
+	bool
+}
+// Create a channel
+resultChannel := make(chan result)
+// Send statement
+resultChannel <- result{u, wc(u)}
+// Receive expression
+r := <-resultChannel
+```
 
 https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/concurrency#channels
 
 ## select
-`myVar := <-ch` means that you wait for values to be sent to a channel, and that is blocking call.
+`myVar := <-ch` means that you wait for values to be sent to a channel, and that is a blocking call.
 
 `select` wait on multiple channels, the first one wins and the code underneath the `case` is executed.
 
@@ -106,6 +218,7 @@ func Racer(a, b string) (winner string) {
 
 ### wait
 
+> A WaitGroup waits for a collection of goroutines to finish. The main goroutine calls Add to set the number of goroutines to wait for. Then each of the goroutines runs and calls Done when finished. At the same time, Wait can be used to block until all goroutines have finished.
 ```go
 var wg sync.WaitGroup
 wg.Add(wantedCount)
@@ -134,6 +247,23 @@ func (c *Counter) Inc() {
 }
 ```
 
+A Mutex must not be copied after first use. So its better to use a pointer and we can create a constructer like below:
+
+```go
+func NewCounter() *Counter {
+	return &Counter{}
+}
+```
+
+# Reflection
+```go
+func t(x interface{}) {
+	val := reflect.ValueOf(x)
+	field := val.Field(0)
+	field.String()
+}
+```
+
 # Http
 ```go
 http.Get("http://www.facebook.com")
@@ -146,37 +276,93 @@ url := server.URL
 server.Close()
 ```
 
+## context
+Can cancel goroutines, etc, example:
 
-# Var keyword
+```go
+func(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 
-- The `var` keyword allows us to define values global to the package.
+	data := make(chan string, 1)
+	go func() {
+		data <- Fetch()
+	}()
 
-https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/pointers-and-errors#refactor-3
+	select {
+	case d := <-data:
+		fmt.Fprint(w, d)
+	case <-ctx.Done():
+		Cancel()
+	}
+}
+```
+`Done()` signals when it is done or cancelled.
+context should be send as the first argument to every http functions.
 
 # Property based tests
 
-Using random number to test the function:
+> quick.Check a function that it will run against a number of random inputs, if the function returns false it will be seen as failing the check.
 
 ```go
 func TestPropertiesOfConversion(t *testing.T) {
-	assertion := func(arabic uint16) bool {
-		if arabic > 3999 {
-			return true
-		}
-		t.Log("testing", arabic)
+	// arabic = 1, roman = I
+	// arabic = 2, roman = II
+	assertion := func(arabic int) bool {
 		roman := ConvertToRoman(arabic)
 		fromRoman := ConvertToArabic(roman)
 		return fromRoman == arabic
 	}
 
-	if err := quick.Check(assertion, &quick.Config{
-		MaxCount: 1000,
-	}); err != nil {
+	// quick.Check is Property based tests sending random arabic to the test
+	if err := quick.Check(assertion, nil); err != nil {
 		t.Error("failed checks", err)
 	}
 }
 ```
 
+# String builder
+A Builder is used to efficiently build a string using Write methods. It minimizes memory copying.
+```go
+var result strings.Builder
+for i := 0; i < 10; i++ {
+	result.WriteString("I")
+}
+return result.String()
+```
+
+# files
+```go
+// to test:
+fstest.MapFS{"hello world.md":  {Data: []byte("hi")}}
+NewPostsFromFS(fs)
+// ...
+func NewPostsFromFS(fileSystem fs.FS)
+// read dir
+dir, err := fs.ReadDir(fileSystem, ".")
+// read a file / content
+for _, f := range dir {
+	postFile, err := fileSystem.Open(f.Name())
+	if err != nil {
+		return Post{}, err
+	}
+	defer postFile.Close()
+	postData, err := io.ReadAll(postFile)
+	if err != nil {
+		return Post{}, err
+	}
+
+	post := Post{Title: string(postData)[7:]}
+	return post, nil
+}
+// read line by line
+scanner := bufio.NewScanner(postFile)
+
+scanner.Scan()
+titleLine := scanner.Text()
+
+scanner.Scan()
+descriptionLine := scanner.Text()
+```
 
 # Go tools
 
@@ -213,6 +399,14 @@ func BenchmarkRepeat(b *testing.B) {
 Running the benchmark with
 ```sh
 go test -bench=.
+
+# output is:
+goos: darwin
+goarch: amd64
+pkg: github.com/quii/learn-go-with-tests/for/v4
+10000000           136 ns/op
+PASS
+# What 136 ns/op means is our function takes on average 136 nanoseconds to run
 ```
 
 You can reset the time, if there are some preparation for the test with this code:
@@ -220,7 +414,7 @@ You can reset the time, if there are some preparation for the test with this cod
 b.ResetTimer()
 ```
 
-### More info
+More info:
 https://golang.org/pkg/testing/#hdr-Benchmarks
 https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/iteration#benchmarking
 https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/concurrency#write-a-test
@@ -240,5 +434,8 @@ errcheck .
 
 More info: https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/pointers-and-errors#unchecked-errors
 
-## GO Vet
-Remember to use go vet in your build scripts as it can alert you to some subtle bugs in your code before they hit your poor users.
+## vet
+```sh
+go vet
+```
+Can find subtle bugs.
