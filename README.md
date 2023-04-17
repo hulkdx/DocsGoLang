@@ -24,6 +24,7 @@ Go language documentation
 - [Reflection](#reflection)
 - [Http](#http)
 	- [context](#context)
+	- [Routing](#routing)
 - [Property based tests](#property-based-tests)
 - [String builder](#string-builder)
 - [files](#files)
@@ -298,6 +299,11 @@ func(w http.ResponseWriter, r *http.Request) {
 ```
 `Done()` signals when it is done or cancelled.
 context should be send as the first argument to every http functions.
+
+## Routing
+`NewServeMux`is a builtin for routing.
+
+[example](https://quii.gitbook.io/learn-go-with-tests/build-an-application/json#write-enough-code-to-make-it-pass)
 
 # Property based tests
 
