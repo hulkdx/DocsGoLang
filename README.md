@@ -1,8 +1,6 @@
 Go language documentation
 
 - [Variables](#variables)
-	- [Immutable](#immutable)
-	- [Mutable](#mutable)
 - [Arrays](#arrays)
 - [Slices](#slices)
 - [Maps](#maps)
@@ -37,13 +35,8 @@ Go language documentation
 	- [vet](#vet)
 # Variables
 
-## Immutable
 ```go
 x := ""
-```
-## Mutable
-```go
-var x = "123"
 ```
 # Arrays
 Fixed size, even functions that requires array needs their size.
