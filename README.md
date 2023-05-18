@@ -177,7 +177,14 @@ resultChannel := make(chan result)
 resultChannel <- result{u, wc(u)}
 // Receive expression
 r := <-resultChannel
+
+// ch is send    only channels
+func a(ch chan<- int)
+// ch is receive only channels
+func a(ch <-chan int)
 ```
+
+- Sending to a channel will block until it is read by someone.
 
 https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/concurrency#channels
 
@@ -292,6 +299,12 @@ func(w http.ResponseWriter, r *http.Request) {
 ```
 `Done()` signals when it is done or cancelled.
 context should be send as the first argument to every http functions.
+
+To cancel the context use the code below:
+```go
+ctx, cancelCtx := context.WithCancel(parentCtx)
+cancelCtx()
+```
 
 ## Routing
 `NewServeMux`is a builtin for routing.
